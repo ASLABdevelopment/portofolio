@@ -1,0 +1,2879 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Aslab. — M. Kholil Hidayatullah</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+  --bg:#f3f1eb;
+  --text:#11110f;
+  --muted:#77756d;
+  --line:#d8d5cd;
+  --accent:#c9ff35;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"DM Sans",sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+
+  transition:
+    background-color .45s ease,
+    color .45s ease;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font-family:inherit;
+}
+
+img{
+  display:block;
+  max-width:100%;
+}
+
+
+/* =========================================
+   LOADING
+========================================= */
+
+.loader{
+  position:fixed;
+  inset:0;
+
+  background:var(--text);
+  color:var(--bg);
+
+  z-index:9999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  transition:
+    opacity .5s cubic-bezier(.22,1,.36,1),
+    visibility .5s ease;
+}
+
+.loader.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.loader-inner{
+  text-align:center;
+  overflow:hidden;
+}
+
+.loader-logo{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(3rem,10vw,7rem);
+
+  font-weight:700;
+
+  letter-spacing:-.08em;
+
+  transform:translateY(35px);
+  opacity:0;
+
+  animation:
+    loaderLogo .7s .05s cubic-bezier(.22,1,.36,1)
+    forwards;
+}
+
+.loader-logo span{
+  color:var(--accent);
+}
+
+.loader-text{
+  margin-top:15px;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.65rem;
+
+  color:#888;
+
+  text-transform:uppercase;
+
+  opacity:0;
+
+  animation:
+    loaderText .5s .22s ease forwards;
+}
+
+.loader-line{
+  width:120px;
+  height:1px;
+
+  background:#333;
+
+  margin:18px auto 0;
+
+  overflow:hidden;
+}
+
+.loader-line span{
+  display:block;
+
+  width:100%;
+  height:100%;
+
+  background:var(--accent);
+
+  transform:translateX(-100%);
+
+  animation:
+    loaderLine .55s .08s cubic-bezier(.22,1,.36,1)
+    forwards;
+}
+
+@keyframes loaderLogo{
+  to{
+    transform:translateY(0);
+    opacity:1;
+  }
+}
+
+@keyframes loaderText{
+  to{
+    opacity:1;
+  }
+}
+
+@keyframes loaderLine{
+  to{
+    transform:translateX(0);
+  }
+}
+
+
+/* =========================================
+   SCROLL PROGRESS
+========================================= */
+
+.scroll-progress{
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  width:0%;
+
+  height:3px;
+
+  background:var(--accent);
+
+  z-index:9998;
+
+  transform-origin:left;
+
+  transition:width .08s linear;
+}
+
+
+/* =========================================
+   CUSTOM CURSOR
+========================================= */
+
+.cursor{
+  position:fixed;
+
+  width:14px;
+  height:14px;
+
+  border:1px solid var(--text);
+
+  border-radius:50%;
+
+  pointer-events:none;
+
+  z-index:10000;
+
+  transform:translate(-50%,-50%);
+
+  transition:
+    width .3s cubic-bezier(.22,1,.36,1),
+    height .3s cubic-bezier(.22,1,.36,1),
+    background .3s ease,
+    border-color .3s ease;
+}
+
+.cursor.active{
+  width:55px;
+  height:55px;
+
+  background:var(--accent);
+
+  border-color:var(--accent);
+
+  mix-blend-mode:multiply;
+}
+
+.cursor-text{
+  position:fixed;
+
+  pointer-events:none;
+
+  z-index:10001;
+
+  transform:translate(-50%,-50%);
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.55rem;
+
+  color:#111;
+
+  opacity:0;
+
+  transition:
+    opacity .25s ease;
+}
+
+.cursor-text.show{
+  opacity:1;
+}
+
+
+/* =========================================
+   NAV
+========================================= */
+
+nav{
+  position:relative;
+
+  z-index:50;
+
+  width:100%;
+
+  padding:25px 5vw;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+}
+
+.logo{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-weight:700;
+
+  font-size:1.3rem;
+
+  letter-spacing:-.05em;
+
+  transition:transform .35s cubic-bezier(.22,1,.36,1);
+}
+
+.logo span{
+  color:#777;
+}
+
+.nav-right{
+  display:flex;
+
+  align-items:center;
+
+  gap:28px;
+}
+
+.nav-right a{
+  font-family:"DM Mono",monospace;
+
+  font-size:.72rem;
+
+  text-transform:uppercase;
+
+  transition:
+    opacity .3s ease,
+    transform .3s cubic-bezier(.22,1,.36,1);
+}
+
+.nav-right a:hover{
+  opacity:.5;
+}
+
+
+/* =========================================
+   THEME
+========================================= */
+
+.theme-toggle{
+  width:38px;
+  height:38px;
+
+  border:1px solid var(--line);
+
+  background:transparent;
+
+  color:var(--text);
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  cursor:none;
+
+  transition:
+    background .35s ease,
+    color .35s ease,
+    transform .45s cubic-bezier(.22,1,.36,1);
+}
+
+.theme-toggle:hover{
+  background:var(--text);
+
+  color:var(--bg);
+
+  transform:rotate(15deg) scale(1.06);
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero{
+  min-height:88vh;
+
+  padding:50px 5vw 100px;
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+}
+
+.hero-content{
+  width:100%;
+
+  position:relative;
+
+  z-index:5;
+}
+
+.eyebrow{
+  font-family:"DM Mono",monospace;
+
+  font-size:.7rem;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  margin-bottom:25px;
+
+  color:var(--muted);
+
+  opacity:0;
+
+  transform:translateY(22px);
+
+  transition:
+    opacity .8s cubic-bezier(.22,1,.36,1),
+    transform .8s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-start .eyebrow{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.hero h1{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(4rem,11vw,10.5rem);
+
+  line-height:.82;
+
+  letter-spacing:-.085em;
+
+  font-weight:600;
+
+  max-width:1050px;
+
+  opacity:0;
+
+  transform:translateY(45px);
+
+  transition:
+    opacity 1s .08s cubic-bezier(.22,1,.36,1),
+    transform 1s .08s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-start h1{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.hero h1 .indent{
+  margin-left:9vw;
+}
+
+.hero h1 .outline{
+  color:transparent;
+
+  -webkit-text-stroke:1.5px var(--text);
+}
+
+.hero-bottom{
+  margin-top:60px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:end;
+
+  max-width:850px;
+
+  opacity:0;
+
+  transform:translateY(30px);
+
+  transition:
+    opacity .8s .25s cubic-bezier(.22,1,.36,1),
+    transform .8s .25s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-start .hero-bottom{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.hero-description{
+  max-width:370px;
+
+  font-size:.95rem;
+
+  line-height:1.7;
+
+  color:#55534e;
+}
+
+body.dark .hero-description{
+  color:#aaa79e;
+}
+
+.hero-label{
+  font-family:"DM Mono",monospace;
+
+  font-size:.68rem;
+
+  line-height:1.8;
+
+  text-transform:uppercase;
+
+  color:var(--muted);
+}
+
+
+/* =========================================
+   ACCENT
+========================================= */
+
+.accent-dot{
+  position:absolute;
+
+  width:65px;
+  height:65px;
+
+  border-radius:50%;
+
+  background:var(--accent);
+
+  right:30vw;
+  top:20%;
+
+  z-index:1;
+
+  opacity:0;
+
+  transform:scale(.7);
+
+  transition:
+    opacity .8s .3s ease,
+    transform 1s .25s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-start .accent-dot{
+  opacity:1;
+  transform:scale(1);
+  animation:float 4s 1.2s ease-in-out infinite;
+}
+
+@keyframes float{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-15px);
+  }
+
+}
+
+
+/* =========================================
+   PHOTO DECK
+========================================= */
+
+.photo-deck{
+  position:absolute;
+
+  right:7vw;
+  top:50%;
+
+  transform:translateY(-45%) rotate(2deg);
+
+  width:min(31vw,380px);
+
+  aspect-ratio:.68;
+
+  z-index:10;
+
+  touch-action:pan-y;
+
+  user-select:none;
+
+  opacity:0;
+
+  transition:
+    opacity .9s .35s ease,
+    transform 1s .3s cubic-bezier(.22,1,.36,1);
+}
+
+.hero-start .photo-deck{
+  opacity:1;
+
+  transform:
+    translateY(-45%)
+    rotate(2deg);
+}
+
+.photo-card{
+  position:absolute;
+
+  inset:0;
+
+  border-radius:5px;
+
+  overflow:hidden;
+
+  background:#ddd;
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,.15);
+
+  cursor:grab;
+
+  will-change:transform;
+
+  transition:
+    transform .65s cubic-bezier(.22,1,.36,1),
+    opacity .45s ease,
+    box-shadow .4s ease;
+}
+
+.photo-card:active{
+  cursor:grabbing;
+}
+
+.photo-card img{
+  width:100%;
+  height:100%;
+
+  object-fit:cover;
+
+  object-position:center;
+
+  pointer-events:none;
+}
+
+.photo-card.dragging{
+  transition:none !important;
+}
+
+.photo-counter{
+  position:absolute;
+
+  bottom:-40px;
+  left:0;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.68rem;
+
+  color:var(--muted);
+}
+
+.swipe-hint{
+  position:absolute;
+
+  right:0;
+  bottom:-40px;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.68rem;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+
+  transition:opacity .3s ease;
+}
+
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+section{
+  padding:130px 5vw;
+}
+
+.section-label{
+  font-family:"DM Mono",monospace;
+
+  font-size:.7rem;
+
+  text-transform:uppercase;
+
+  color:var(--muted);
+
+  margin-bottom:25px;
+}
+
+.section-title{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(3rem,7vw,7rem);
+
+  line-height:.9;
+
+  letter-spacing:-.07em;
+
+  font-weight:600;
+
+  max-width:900px;
+}
+
+
+/* =========================================
+   ABOUT
+========================================= */
+
+.about{
+  border-top:1px solid var(--line);
+}
+
+.about-grid{
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:8vw;
+
+  margin-top:70px;
+}
+
+.about-text{
+  font-size:1.2rem;
+
+  line-height:1.7;
+
+  max-width:580px;
+}
+
+.about-text strong{
+  font-weight:600;
+}
+
+.info-list{
+  border-top:1px solid var(--line);
+}
+
+.info-item{
+  display:flex;
+
+  justify-content:space-between;
+
+  padding:18px 0;
+
+  border-bottom:1px solid var(--line);
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.72rem;
+
+  text-transform:uppercase;
+}
+
+.info-item span:last-child{
+  color:var(--muted);
+}
+
+
+/* =========================================
+   PROJECTS
+========================================= */
+
+.projects{
+  border-top:1px solid var(--line);
+}
+
+.project{
+  border-top:1px solid var(--line);
+
+  margin-top:90px;
+
+  padding-top:25px;
+}
+
+.project-head{
+  display:grid;
+
+  grid-template-columns:70px 1fr auto;
+
+  align-items:start;
+
+  gap:20px;
+}
+
+.project-number{
+  font-family:"DM Mono",monospace;
+
+  font-size:.7rem;
+}
+
+.project-name{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(2.5rem,6vw,6rem);
+
+  letter-spacing:-.06em;
+
+  line-height:.9;
+
+  transition:
+    transform .5s cubic-bezier(.22,1,.36,1);
+}
+
+.project:hover .project-name{
+  transform:translateX(8px);
+}
+
+.project-type{
+  font-family:"DM Mono",monospace;
+
+  font-size:.68rem;
+
+  color:var(--muted);
+
+  text-align:right;
+
+  line-height:1.8;
+}
+
+.project-description{
+  margin:30px 0 0 12%;
+
+  max-width:600px;
+
+  color:#5d5b55;
+
+  line-height:1.8;
+
+  font-size:1rem;
+}
+
+body.dark .project-description{
+  color:#aaa79e;
+}
+
+
+/* =========================================
+   LARGE PHOTO
+========================================= */
+
+.project-photo{
+  width:min(850px,82%);
+
+  margin:110px auto 0;
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.project-photo img{
+  width:100%;
+
+  aspect-ratio:16/10;
+
+  object-fit:cover;
+
+  object-position:center;
+
+  display:block;
+
+  filter:grayscale(8%);
+
+  cursor:none;
+
+  transition:
+    transform 1s cubic-bezier(.22,1,.36,1);
+}
+
+.project-photo:hover img{
+  transform:scale(1.025);
+}
+
+.project-photo-caption{
+  display:flex;
+
+  justify-content:space-between;
+
+  padding-top:14px;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.65rem;
+
+  color:var(--muted);
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================
+   SKILLS
+========================================= */
+
+.skills{
+  border-top:1px solid var(--line);
+}
+
+.skill-grid{
+  margin-top:70px;
+
+  display:grid;
+
+  grid-template-columns:repeat(2,1fr);
+
+  border-top:1px solid var(--line);
+}
+
+.skill{
+  padding:35px 10px;
+
+  border-bottom:1px solid var(--line);
+
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(1.5rem,3vw,3rem);
+
+  letter-spacing:-.04em;
+
+  transition:
+    transform .45s cubic-bezier(.22,1,.36,1),
+    padding-left .45s cubic-bezier(.22,1,.36,1);
+}
+
+.skill:hover{
+  transform:translateX(6px);
+}
+
+.skill:nth-child(odd){
+  border-right:1px solid var(--line);
+
+  padding-left:0;
+}
+
+.skill:nth-child(even){
+  padding-left:35px;
+}
+
+.skill small{
+  display:block;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.62rem;
+
+  color:var(--muted);
+
+  margin-bottom:10px;
+}
+
+
+/* =========================================
+   CONTACT
+========================================= */
+
+.contact{
+  background:var(--text);
+
+  color:var(--bg);
+
+  min-height:75vh;
+
+  display:flex;
+
+  flex-direction:column;
+
+  justify-content:space-between;
+}
+
+.contact .section-label{
+  color:#888;
+}
+
+.contact-title{
+  font-family:"Space Grotesk",sans-serif;
+
+  font-size:clamp(4rem,10vw,10rem);
+
+  letter-spacing:-.08em;
+
+  line-height:.8;
+
+  max-width:1000px;
+}
+
+.contact-title span{
+  color:var(--accent);
+}
+
+.socials{
+  display:flex;
+
+  gap:35px;
+
+  flex-wrap:wrap;
+
+  margin-top:80px;
+}
+
+.socials a{
+  font-family:"DM Mono",monospace;
+
+  font-size:.72rem;
+
+  text-transform:uppercase;
+
+  border-bottom:1px solid #555;
+
+  padding-bottom:7px;
+
+  transition:
+    color .3s ease,
+    border-color .3s ease,
+    transform .4s cubic-bezier(.22,1,.36,1);
+}
+
+.socials a:hover{
+  color:var(--accent);
+
+  border-color:var(--accent);
+}
+
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer{
+  background:var(--text);
+
+  color:#777;
+
+  padding:25px 5vw;
+
+  border-top:1px solid #292929;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.65rem;
+
+  text-transform:uppercase;
+}
+
+
+/* =========================================
+   REVEAL
+========================================= */
+
+.reveal{
+  opacity:0;
+
+  transform:
+    translateY(38px)
+    scale(.985);
+
+  transition:
+    opacity .8s cubic-bezier(.22,1,.36,1),
+    transform .8s cubic-bezier(.22,1,.36,1);
+
+  transition-delay:var(--delay,0s);
+}
+
+.reveal.show{
+  opacity:1;
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* =========================================
+   FULLSCREEN
+========================================= */
+
+.photo-viewer{
+  position:fixed;
+
+  inset:0;
+
+  background:rgba(0,0,0,.94);
+
+  z-index:9990;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:30px;
+
+  opacity:0;
+
+  visibility:hidden;
+
+  transition:
+    opacity .4s ease,
+    visibility .4s ease;
+}
+
+.photo-viewer.open{
+  opacity:1;
+
+  visibility:visible;
+}
+
+.photo-viewer img{
+  max-width:95vw;
+
+  max-height:90vh;
+
+  object-fit:contain;
+
+  transform:
+    scale(.92)
+    translateY(15px);
+
+  transition:
+    transform .55s cubic-bezier(.22,1,.36,1);
+}
+
+.photo-viewer.open img{
+  transform:
+    scale(1)
+    translateY(0);
+}
+
+.close-viewer{
+  position:absolute;
+
+  top:25px;
+
+  right:30px;
+
+  width:45px;
+
+  height:45px;
+
+  border:1px solid #555;
+
+  background:transparent;
+
+  color:white;
+
+  border-radius:50%;
+
+  font-size:20px;
+
+  cursor:none;
+
+  transition:
+    background .3s ease,
+    color .3s ease,
+    transform .4s cubic-bezier(.22,1,.36,1);
+}
+
+.close-viewer:hover{
+  background:white;
+
+  color:black;
+
+  transform:rotate(90deg);
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+.toast{
+  position:fixed;
+
+  bottom:30px;
+
+  left:50%;
+
+  transform:
+    translate(-50%,20px)
+    scale(.95);
+
+  background:var(--text);
+
+  color:var(--bg);
+
+  padding:13px 20px;
+
+  border-radius:50px;
+
+  font-family:"DM Mono",monospace;
+
+  font-size:.65rem;
+
+  z-index:10001;
+
+  opacity:0;
+
+  pointer-events:none;
+
+  transition:
+    opacity .3s ease,
+    transform .4s cubic-bezier(.22,1,.36,1);
+}
+
+.toast.show{
+  opacity:1;
+
+  transform:
+    translate(-50%,0)
+    scale(1);
+}
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+body.dark{
+  --bg:#11110f;
+  --text:#f3f1eb;
+  --muted:#89877f;
+  --line:#2d2d29;
+  --accent:#c9ff35;
+}
+
+body.dark .photo-card{
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.4);
+}
+
+body.dark .contact{
+  background:#050505;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:800px){
+
+  body{
+    cursor:auto;
+  }
+
+  .cursor,
+  .cursor-text{
+    display:none;
+  }
+
+  nav{
+    padding:20px 6vw;
+  }
+
+  .nav-right{
+    gap:14px;
+  }
+
+  .nav-right a{
+    font-size:.6rem;
+  }
+
+  .theme-toggle{
+    width:34px;
+    height:34px;
+
+    cursor:pointer;
+
+    font-size:15px;
+  }
+
+
+  .hero{
+    min-height:auto;
+
+    padding:55px 6vw 130px;
+
+    display:block;
+  }
+
+  .hero h1{
+    font-size:clamp(3.7rem,17vw,7rem);
+  }
+
+  .hero h1 .indent{
+    margin-left:5vw;
+  }
+
+  .hero-bottom{
+    display:block;
+
+    margin-top:35px;
+  }
+
+  .hero-label{
+    margin-top:25px;
+  }
+
+  .accent-dot{
+    width:35px;
+    height:35px;
+
+    right:10%;
+
+    top:16%;
+  }
+
+
+  .photo-deck{
+    position:relative;
+
+    right:auto;
+    top:auto;
+
+    transform:none;
+
+    width:min(76vw,330px);
+
+    aspect-ratio:.68;
+
+    margin:100px auto 55px;
+  }
+
+  .hero-start .photo-deck{
+    transform:none;
+  }
+
+
+  section{
+    padding:90px 6vw;
+  }
+
+
+  .about-grid{
+    grid-template-columns:1fr;
+
+    gap:50px;
+  }
+
+  .about-text{
+    font-size:1rem;
+  }
+
+
+  .project-head{
+    grid-template-columns:40px 1fr;
+  }
+
+  .project-type{
+    grid-column:2;
+
+    text-align:left;
+  }
+
+  .project-description{
+    margin-left:0;
+  }
+
+
+  .project-photo{
+    width:100%;
+
+    margin-top:75px;
+  }
+
+  .project-photo img{
+    aspect-ratio:4/5;
+
+    cursor:pointer;
+  }
+
+
+  .skill-grid{
+    grid-template-columns:1fr;
+  }
+
+  .skill:nth-child(odd){
+    border-right:none;
+
+    padding-left:0;
+  }
+
+  .skill:nth-child(even){
+    padding-left:0;
+  }
+
+
+  .contact{
+    min-height:65vh;
+  }
+
+  .socials{
+    gap:20px;
+  }
+
+
+  footer{
+    padding:20px 6vw;
+
+    display:block;
+
+    line-height:2;
+  }
+
+
+  .photo-viewer{
+    padding:15px;
+  }
+
+  .photo-viewer img{
+    max-width:100%;
+
+    max-height:85vh;
+  }
+
+}
+
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+
+    scroll-behavior:auto!important;
+
+    animation:none!important;
+
+    transition-duration:.01ms!important;
+  }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- LOADING -->
+
+<div class="loader" id="loader">
+
+  <div class="loader-inner">
+
+    <div class="loader-logo">
+      Aslab<span>.</span>
+    </div>
+
+    <div class="loader-line">
+      <span></span>
+    </div>
+
+    <div class="loader-text">
+      Portfolio...
+    </div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="scroll-progress"
+  id="scrollProgress">
+</div>
+
+
+<div
+  class="cursor"
+  id="cursor">
+</div>
+
+<div
+  class="cursor-text"
+  id="cursorText">
+  VIEW
+</div>
+
+
+<!-- NAV -->
+
+<nav>
+
+  <a href="#" class="logo magnetic">
+    Aslab<span>.</span>
+  </a>
+
+  <div class="nav-right">
+
+    <button
+      class="theme-toggle magnetic"
+      id="themeToggle"
+      aria-label="Toggle dark mode">
+
+      <span id="themeIcon">
+        ☾
+      </span>
+
+    </button>
+
+    <a href="#work">
+      Work
+    </a>
+
+    <a href="#about">
+      About
+    </a>
+
+    <a href="#contact">
+      Contact
+    </a>
+
+  </div>
+
+</nav>
+
+
+
+<main>
+
+
+<!-- HERO -->
+
+<section class="hero" id="home">
+
+  <div class="accent-dot"></div>
+
+  <div class="hero-content">
+
+    <div class="eyebrow">
+      Technical Informatics Student
+      — UNUJA / 2026
+    </div>
+
+
+    <h1>
+
+      M. KHOLIL
+
+      <br>
+
+      <span class="indent outline">
+        HIDAYATULLAH.
+      </span>
+
+    </h1>
+
+
+    <div class="hero-bottom">
+
+      <p class="hero-description">
+
+        Mahasiswa Teknik Informatika yang sedang
+        membangun kemampuan di bidang web development,
+        programming, dan teknologi digital.
+
+      </p>
+
+
+      <div class="hero-label">
+
+        Indonesia<br>
+        Developer / Student<br>
+        Currently Learning
+
+      </div>
+
+    </div>
+
+
+    <!-- PHOTO DECK -->
+
+    <div
+      class="photo-deck"
+      id="photoDeck">
+
+
+      <div class="photo-card">
+
+        <img
+          src="foto-kholil1.jpg"
+          alt="Foto Kholil 1">
+
+      </div>
+
+
+      <div class="photo-card">
+
+        <img
+          src="foto-kholil2.jpg"
+          alt="Foto Kholil 2">
+
+      </div>
+
+
+      <div class="photo-card">
+
+        <img
+          src="foto-kholil3.jpg"
+          alt="Foto Kholil 3">
+
+      </div>
+
+
+      <div class="photo-card">
+
+        <img
+          src="foto-kholil4.jpg"
+          alt="Foto Kholil 4">
+
+      </div>
+
+
+      <div class="photo-card">
+
+        <img
+          src="foto-kholil5.jpg"
+          alt="Foto Kholil 5">
+
+      </div>
+
+
+      <div class="photo-counter">
+
+        <span id="photoNumber">
+          01
+        </span>
+
+        / 05
+
+      </div>
+
+
+      <div class="swipe-hint">
+        ← Swipe →
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- ABOUT -->
+
+<section
+  class="about"
+  id="about">
+
+
+  <div class="section-label reveal">
+    01 — About
+  </div>
+
+
+  <h2 class="section-title reveal">
+
+    Belajar teknologi.
+    <br>
+    Membangun sesuatu.
+
+  </h2>
+
+
+  <div class="about-grid">
+
+
+    <p class="about-text reveal">
+
+      Saya <strong>M. Kholil Hidayatullah</strong>,
+      mahasiswa Teknik Informatika di Universitas
+      Nurul Jadid.
+
+      Saat ini saya fokus mempelajari dasar
+      pemrograman, web development, dan berbagai
+      teknologi yang dapat digunakan untuk membuat
+      produk digital.
+
+    </p>
+
+
+    <div class="info-list reveal">
+
+
+      <div class="info-item">
+
+        <span>
+          Based
+        </span>
+
+        <span>
+          Indonesia
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          Study
+        </span>
+
+        <span>
+          Teknik Informatika
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          University
+        </span>
+
+        <span>
+          UNUJA
+        </span>
+
+      </div>
+
+
+      <div class="info-item">
+
+        <span>
+          Focus
+        </span>
+
+        <span>
+          Web & Programming
+        </span>
+
+      </div>
+
+
+    </div>
+
+  </div>
+
+</section>
+
+
+
+<!-- PROJECTS -->
+
+<section
+  class="projects"
+  id="work">
+
+
+  <div class="section-label reveal">
+    02 — Selected Work
+  </div>
+
+
+  <h2 class="section-title reveal">
+
+    Things I'm
+    <br>
+    building.
+
+  </h2>
+
+
+
+  <article class="project reveal">
+
+    <div class="project-head">
+
+      <div class="project-number">
+        01
+      </div>
+
+      <h3 class="project-name">
+        Portfolio
+      </h3>
+
+      <div class="project-type">
+
+        WEBSITE<br>
+        HTML / CSS / JS
+
+      </div>
+
+    </div>
+
+
+    <p class="project-description">
+
+      Website portfolio pribadi untuk memperkenalkan
+      profil, kemampuan, proses belajar, dan berbagai
+      project yang sedang saya kembangkan sebagai
+      mahasiswa Teknik Informatika.
+
+    </p>
+
+  </article>
+
+
+
+  <article class="project reveal">
+
+    <div class="project-head">
+
+      <div class="project-number">
+        02
+      </div>
+
+      <h3 class="project-name">
+        Katalog UMKM
+      </h3>
+
+      <div class="project-type">
+
+        CONCEPT<br>
+        WEB / WHATSAPP
+
+      </div>
+
+    </div>
+
+
+    <p class="project-description">
+
+      Konsep website katalog sederhana untuk membantu
+      UMKM menampilkan produk, informasi usaha, dan
+      menerima pesanan melalui WhatsApp.
+
+    </p>
+
+  </article>
+
+
+
+  <article class="project reveal">
+
+    <div class="project-head">
+
+      <div class="project-number">
+        03
+      </div>
+
+      <h3 class="project-name">
+        Aslab AI
+      </h3>
+
+      <div class="project-type">
+
+        CONCEPT<br>
+        BOT / AUTOMATION
+
+      </div>
+
+    </div>
+
+
+    <p class="project-description">
+
+      Konsep bot WhatsApp yang sedang dikembangkan
+      untuk membantu kebutuhan informasi dan aktivitas
+      kantor asisten laboratorium.
+
+    </p>
+
+  </article>
+
+
+
+  <div
+    class="project-photo reveal"
+    id="profilePhoto">
+
+    <img
+      src="foto-kholil4.jpg"
+      alt="M. Kholil Hidayatullah">
+
+    <div class="project-photo-caption">
+
+      <span>
+        PROFILE
+      </span>
+
+      <span>
+        M. KHOLIL HIDAYATULLAH
+      </span>
+
+    </div>
+
+  </div>
+
+
+</section>
+
+
+
+<!-- SKILLS -->
+
+<section class="skills">
+
+
+  <div class="section-label reveal">
+    03 — Skills
+  </div>
+
+
+  <h2 class="section-title reveal">
+
+    Currently
+    <br>
+    learning.
+
+  </h2>
+
+
+  <div class="skill-grid reveal">
+
+
+    <div class="skill">
+
+      <small>
+        01
+      </small>
+
+      HTML / CSS
+
+    </div>
+
+
+    <div class="skill">
+
+      <small>
+        02
+      </small>
+
+      JavaScript
+
+    </div>
+
+
+    <div class="skill">
+
+      <small>
+        03
+      </small>
+
+      Python
+
+    </div>
+
+
+    <div class="skill">
+
+      <small>
+        04
+      </small>
+
+      Git / GitHub
+
+    </div>
+
+
+    <div class="skill">
+
+      <small>
+        05
+      </small>
+
+      Responsive Web
+
+    </div>
+
+
+    <div class="skill">
+
+      <small>
+        06
+      </small>
+
+      UI Design
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- CONTACT -->
+
+<section
+  class="contact"
+  id="contact">
+
+
+  <div>
+
+    <div class="section-label">
+      04 — Let's talk
+    </div>
+
+
+    <h2 class="contact-title">
+
+      Have an idea?
+
+      <br>
+
+      <span>
+        Let's build.
+      </span>
+
+    </h2>
+
+  </div>
+
+
+  <div class="socials">
+
+    <a
+      href="https://wa.me/6285187818122"
+      target="_blank">
+
+      WhatsApp ↗
+
+    </a>
+
+
+    <a
+      href="https://www.tiktok.com/@zx_kmf4"
+      target="_blank">
+
+      TikTok ↗
+
+    </a>
+
+
+    <a
+      href="https://www.facebook.com/share/16QH1FffoYd/"
+      target="_blank">
+
+      Facebook ↗
+
+    </a>
+
+  </div>
+
+
+</section>
+
+</main>
+
+
+
+<!-- FOOTER -->
+
+<footer>
+
+  <span>
+    Aslab. © 2026
+  </span>
+
+  <span>
+    M. Kholil Hidayatullah
+  </span>
+
+</footer>
+
+
+
+<!-- PHOTO VIEWER -->
+
+<div
+  class="photo-viewer"
+  id="photoViewer">
+
+
+  <button
+    class="close-viewer"
+    id="closeViewer">
+
+    ×
+
+  </button>
+
+
+  <img
+    id="viewerImage"
+    src=""
+    alt="Fullscreen photo">
+
+</div>
+
+
+
+<div
+  class="toast"
+  id="toast">
+
+  WhatsApp copied ✓
+
+</div>
+
+
+
+<script>
+
+/* =========================================
+   PAGE INTRO
+========================================= */
+
+window.addEventListener("load", () => {
+
+  const loader =
+    document.getElementById("loader");
+
+  const hero =
+    document.querySelector(".hero");
+
+  setTimeout(() => {
+
+    loader.classList.add("hide");
+
+    setTimeout(() => {
+
+      hero.classList.add("hero-start");
+
+    },120);
+
+  },650);
+
+});
+
+
+/* =========================================
+   DARK MODE
+========================================= */
+
+const themeToggle =
+  document.getElementById("themeToggle");
+
+const themeIcon =
+  document.getElementById("themeIcon");
+
+const savedTheme =
+  localStorage.getItem("aslab-theme");
+
+
+if(savedTheme === "dark"){
+
+  document.body.classList.add("dark");
+
+  themeIcon.textContent = "☀";
+
+}
+
+
+themeToggle.addEventListener("click", () => {
+
+  document.body.classList.toggle("dark");
+
+  const isDark =
+    document.body.classList.contains("dark");
+
+  themeIcon.textContent =
+    isDark ? "☀" : "☾";
+
+  localStorage.setItem(
+    "aslab-theme",
+    isDark ? "dark" : "light"
+  );
+
+});
+
+
+/* =========================================
+   SCROLL PROGRESS
+========================================= */
+
+const scrollProgress =
+  document.getElementById("scrollProgress");
+
+
+function updateProgress(){
+
+  const scrollTop =
+    window.scrollY;
+
+  const maxScroll =
+    document.documentElement.scrollHeight
+    - window.innerHeight;
+
+  const progress =
+    maxScroll > 0
+    ? scrollTop / maxScroll
+    : 0;
+
+  scrollProgress.style.width =
+    (progress * 100) + "%";
+
+}
+
+
+window.addEventListener(
+  "scroll",
+  updateProgress,
+  {passive:true}
+);
+
+
+/* =========================================
+   CUSTOM CURSOR
+========================================= */
+
+const cursor =
+  document.getElementById("cursor");
+
+const cursorText =
+  document.getElementById("cursorText");
+
+let mouseX = 0;
+let mouseY = 0;
+
+let cursorX = 0;
+let cursorY = 0;
+
+
+window.addEventListener(
+  "mousemove",
+  event => {
+
+    mouseX = event.clientX;
+    mouseY = event.clientY;
+
+  }
+);
+
+
+function cursorLoop(){
+
+  cursorX +=
+    (mouseX - cursorX) * .16;
+
+  cursorY +=
+    (mouseY - cursorY) * .16;
+
+  cursor.style.left =
+    cursorX + "px";
+
+  cursor.style.top =
+    cursorY + "px";
+
+  cursorText.style.left =
+    cursorX + "px";
+
+  cursorText.style.top =
+    cursorY + "px";
+
+  requestAnimationFrame(
+    cursorLoop
+  );
+
+}
+
+
+cursorLoop();
+
+
+document.querySelectorAll(
+  "a, button, .project-photo img"
+).forEach(element => {
+
+  element.addEventListener(
+    "mouseenter",
+    () => {
+
+      cursor.classList.add("active");
+
+      cursorText.classList.add("show");
+
+    }
+  );
+
+  element.addEventListener(
+    "mouseleave",
+    () => {
+
+      cursor.classList.remove("active");
+
+      cursorText.classList.remove("show");
+
+    }
+  );
+
+});
+
+
+/* =========================================
+   PHOTO DECK
+========================================= */
+
+const deck =
+  document.getElementById("photoDeck");
+
+const cards =
+  [...deck.querySelectorAll(".photo-card")];
+
+const counter =
+  document.getElementById("photoNumber");
+
+let activeIndex = 0;
+
+let startX = 0;
+let startY = 0;
+
+let currentX = 0;
+let currentY = 0;
+
+let dragging = false;
+
+
+/* Render */
+
+function renderDeck(){
+
+  cards.forEach((card,index) => {
+
+    const position =
+      (index - activeIndex + cards.length)
+      % cards.length;
+
+
+    card.style.zIndex =
+      cards.length - position;
+
+
+    if(position === 0){
+
+      card.style.transform =
+        "translate3d(0,0,0) rotate(0deg) scale(1)";
+
+      card.style.opacity = "1";
+
+    }
+
+    else if(position === 1){
+
+      card.style.transform =
+        "translate3d(12px,13px,0) rotate(4deg) scale(.97)";
+
+      card.style.opacity = ".96";
+
+    }
+
+    else if(position === 2){
+
+      card.style.transform =
+        "translate3d(24px,25px,0) rotate(-5deg) scale(.94)";
+
+      card.style.opacity = ".88";
+
+    }
+
+    else if(position === 3){
+
+      card.style.transform =
+        "translate3d(35px,37px,0) rotate(7deg) scale(.91)";
+
+      card.style.opacity = ".72";
+
+    }
+
+    else{
+
+      card.style.transform =
+        "translate3d(45px,48px,0) rotate(-8deg) scale(.88)";
+
+      card.style.opacity = ".5";
+
+    }
+
+  });
+
+
+  counter.textContent =
+    String(activeIndex + 1)
+    .padStart(2,"0");
+
+}
+
+
+renderDeck();
+
+
+/* Next */
+
+function nextPhoto(){
+
+  const current =
+    cards[activeIndex];
+
+  current.style.transform =
+    "translate3d(-120%, -5%, 0) rotate(-14deg) scale(.9)";
+
+  current.style.opacity = "0";
+
+
+  setTimeout(() => {
+
+    activeIndex =
+      (activeIndex + 1)
+      % cards.length;
+
+    renderDeck();
+
+  },430);
+
+}
+
+
+/* Previous */
+
+function previousPhoto(){
+
+  activeIndex =
+    (activeIndex - 1 + cards.length)
+    % cards.length;
+
+  renderDeck();
+
+}
+
+
+/* Pointer down */
+
+deck.addEventListener(
+  "pointerdown",
+  event => {
+
+    const current =
+      cards[activeIndex];
+
+    dragging = true;
+
+    startX = event.clientX;
+    startY = event.clientY;
+
+    currentX = 0;
+    currentY = 0;
+
+    current.classList.add("dragging");
+
+    deck.setPointerCapture(
+      event.pointerId
+    );
+
+  }
+);
+
+
+/* Pointer move */
+
+deck.addEventListener(
+  "pointermove",
+  event => {
+
+    if(!dragging) return;
+
+    currentX =
+      event.clientX - startX;
+
+    currentY =
+      event.clientY - startY;
+
+
+    const current =
+      cards[activeIndex];
+
+
+    const rotate =
+      currentX * .035;
+
+    const scale =
+      Math.max(
+        .92,
+        1 - Math.abs(currentX) / 1200
+      );
+
+
+    current.style.transform =
+      `translate3d(
+        ${currentX}px,
+        ${currentY * .12}px,
+        0
+      )
+      rotate(${rotate}deg)
+      scale(${scale})`;
+
+  }
+);
+
+
+/* Pointer up */
+
+deck.addEventListener(
+  "pointerup",
+  finishDrag
+);
+
+deck.addEventListener(
+  "pointercancel",
+  finishDrag
+);
+
+
+function finishDrag(){
+
+  if(!dragging) return;
+
+  dragging = false;
+
+
+  const current =
+    cards[activeIndex];
+
+  current.classList.remove(
+    "dragging"
+  );
+
+
+  const threshold = 65;
+
+
+  if(currentX < -threshold){
+
+    nextPhoto();
+
+  }
+
+  else if(currentX > threshold){
+
+    previousPhoto();
+
+  }
+
+  else{
+
+    renderDeck();
+
+  }
+
+
+  currentX = 0;
+  currentY = 0;
+
+}
+
+
+/* Tap */
+
+let lastPointerDown = 0;
+
+deck.addEventListener(
+  "pointerdown",
+  () => {
+
+    lastPointerDown =
+      Date.now();
+
+  }
+);
+
+
+deck.addEventListener(
+  "click",
+  event => {
+
+    const duration =
+      Date.now() - lastPointerDown;
+
+    if(duration > 500) return;
+
+    if(
+      Math.abs(currentX) > 10
+    ) return;
+
+    if(
+      event.target.closest(".photo-card")
+    ){
+
+      nextPhoto();
+
+    }
+
+  }
+);
+
+
+/* Keyboard */
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "ArrowRight"){
+
+      nextPhoto();
+
+    }
+
+    if(event.key === "ArrowLeft"){
+
+      previousPhoto();
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   SCROLL REVEAL STAGGER
+========================================= */
+
+const revealElements =
+  document.querySelectorAll(".reveal");
+
+
+revealElements.forEach(
+  (element,index) => {
+
+    const parent =
+      element.closest("section");
+
+    if(!parent) return;
+
+    const siblings =
+      [...parent.querySelectorAll(".reveal")];
+
+    const position =
+      siblings.indexOf(element);
+
+
+    element.style.setProperty(
+      "--delay",
+      Math.min(
+        position * .08,
+        .4
+      ) + "s"
+    );
+
+  }
+);
+
+
+const observer =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+          entry.target.classList.add(
+            "show"
+          );
+
+          observer.unobserve(
+            entry.target
+          );
+
+        }
+
+      });
+
+    },
+    {
+      threshold:.12,
+      rootMargin:"0px 0px -35px 0px"
+    }
+  );
+
+
+revealElements.forEach(
+  element => {
+
+    observer.observe(element);
+
+  }
+);
+
+
+/* =========================================
+   FULLSCREEN PHOTO
+========================================= */
+
+const profilePhoto =
+  document.getElementById(
+    "profilePhoto"
+  );
+
+const photoViewer =
+  document.getElementById(
+    "photoViewer"
+  );
+
+const viewerImage =
+  document.getElementById(
+    "viewerImage"
+  );
+
+const closeViewer =
+  document.getElementById(
+    "closeViewer"
+  );
+
+
+profilePhoto.addEventListener(
+  "click",
+  () => {
+
+    const image =
+      profilePhoto.querySelector("img");
+
+    viewerImage.src =
+      image.src;
+
+    photoViewer.classList.add(
+      "open"
+    );
+
+    document.body.style.overflow =
+      "hidden";
+
+  }
+);
+
+
+function closePhotoViewer(){
+
+  photoViewer.classList.remove(
+    "open"
+  );
+
+  document.body.style.overflow =
+    "";
+
+}
+
+
+closeViewer.addEventListener(
+  "click",
+  closePhotoViewer
+);
+
+
+photoViewer.addEventListener(
+  "click",
+  event => {
+
+    if(event.target === photoViewer){
+
+      closePhotoViewer();
+
+    }
+
+  }
+);
+
+
+document.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Escape"){
+
+      closePhotoViewer();
+
+    }
+
+  }
+);
+
+
+/* =========================================
+   MAGNETIC
+========================================= */
+
+if(
+  window.matchMedia(
+    "(pointer:fine)"
+  ).matches
+){
+
+  document.querySelectorAll(
+    ".magnetic"
+  ).forEach(element => {
+
+    element.addEventListener(
+      "mousemove",
+      event => {
+
+        const rect =
+          element.getBoundingClientRect();
+
+        const x =
+          event.clientX
+          - rect.left
+          - rect.width / 2;
+
+        const y =
+          event.clientY
+          - rect.top
+          - rect.height / 2;
+
+
+        element.style.transform =
+          `translate(
+            ${x * .10}px,
+            ${y * .10}px
+          )`;
+
+      }
+    );
+
+
+    element.addEventListener(
+      "mouseleave",
+      () => {
+
+        element.style.transform =
+          "";
+
+      }
+    );
+
+  });
+
+}
+
+
+/* =========================================
+   WHATSAPP TOAST
+========================================= */
+
+const toast =
+  document.getElementById("toast");
+
+function showToast(message){
+
+  toast.textContent =
+    message;
+
+  toast.classList.add("show");
+
+  setTimeout(
+    () => {
+
+      toast.classList.remove("show");
+
+    },
+    1800
+  );
+
+}
+
+</script>
+
+</body>
+</html>
